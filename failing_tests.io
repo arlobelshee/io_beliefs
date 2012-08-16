@@ -10,10 +10,12 @@ Test execute := method(
 	return badness
 )
 
-Test belief := method(
+Test belief ::= method(
 	name := call message argAt(0)
-	call target run := method(call message argAt(1))
+	call target run := call message argAt(1)
+	call target run slotSummary print
 )
+setProc
 
 
 AssertionFailedException := Exception clone
@@ -43,6 +45,7 @@ hope_that := method(
 foo := Test clone
 foo belief(something_rotten_in_the_state,
 	hope_that(1 == 2)
+	hope_that(1 == 3)
 )
 
 
