@@ -3,19 +3,17 @@
 Test := Object clone
 Test execute := method(
 	badness := list()
-	e := try(call target run)
+	e := try(doMessage(run))
 	e catch(AssertionFailedException,
 		badness append(e)
 	)
 	return badness
 )
 
-Test belief ::= method(
+Test belief := method(
 	name := call message argAt(0)
 	call target run := call message argAt(1)
-	call target run slotSummary print
 )
-setProc
 
 
 AssertionFailedException := Exception clone
@@ -24,7 +22,7 @@ run_tests := method(tests,
 	failures := (tests map(execute) flatten)
 	failures foreach(f, (f error .. "\n") print)
 	number_run := tests size
-	"\n\nRan #{number_run} tests.\n" interpolate print
+	"\n\nQuestioned #{number_run} beliefs.\n" interpolate print
 	(failures size == 0) ifTrue(
 		"holy crap! You were right!\n" print
 	) ifFalse(
@@ -33,9 +31,8 @@ run_tests := method(tests,
 )
 
 hope_that := method(
-	"hopes" print
 	(call evalArgAt(0)) ifFalse (
-		AssertionFailedException raise("oh so much pain. You believed #{call message argAt(0) code}!" interpolate)
+		AssertionFailedException raise("Oh why do you believe #{call message argAt(0)}? It just ain't true!" interpolate)
 	)
 )
 
