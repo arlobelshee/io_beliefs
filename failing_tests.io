@@ -3,7 +3,7 @@
 _FoolishBelief := Object clone
 _FoolishBelief description := method(
 	"""Hoping that #{hope} won't make it true!
- This makes mockery of your belief in #{belief}
+ This makes mockery of your belief that #{belief}
  And calls the entire #{ideology _name} ideology into question!
 """ interpolate
 )
@@ -23,7 +23,7 @@ Belief execute := method(
 )
 
 Ideology := Object clone
-Ideology _beliefs := list()
+Ideology _all_known_ideologies := list()
 
 Ideology belief := method(
 	thought := Belief clone
@@ -36,10 +36,13 @@ Ideology belief := method(
 ideology := method(
 	result := Ideology clone
 	result _name := call message argAt(0)
+	result _beliefs := list()
+	Ideology _all_known_ideologies append(result)
 	return result
 )
 
-run_tests := method(ideologies,
+run_tests := method(
+	ideologies := Ideology _all_known_ideologies
 	"\n" print
 	total_beliefs := 0
 	foolishness := list()
@@ -68,22 +71,33 @@ hope_that := method(
 )
 
 
-// My test definitions. We want this to have less boilerplate.
+// This is the system to test.
+in_shakespeare := Object clone
+in_shakespeare hamlet_is_broody := true
+in_shakespeare the_light := "the sun"
 
-the_classics := ideology(shakespere_knows_whats_what)
-the_classics belief(something_is_rotten_in_the_state,
-	hamlet_is_broody := True
-	hope_that(hamlet_is_broody)
-)
-the_classics belief(what_light_through_yonder_window_breaks,
-	the_light := "the sun"
-	hope_that(the_light == "the moon")
-	hope_that(the_light == "the sun")
+the_broodiest := "Angel"
+
+// My test definitions.
+ideology(shakespeare_knows_whats_what) do(
+	belief(something_is_rotten_in_the_state,
+		hope_that(in_shakespeare hamlet_is_broody)
+	)
+	belief(romeo_knows_what_light_through_yonder_window_breaks,
+		hope_that(in_shakespeare the_light == "the moon")
+		hope_that(in_shakespeare the_light == "the sun")
+	)
 )
 
+ideology(joss_wheden_knows_whats_what) do(
+	belief(buffy_chooses_romantic_partners_poorly,
+		hope_that("Angel" == the_broodiest)
+	)
+)
 
 // Run my tests; passing them directly to the runner.
 
-run_tests(list(the_classics, the_classics))
+run_tests()
+//run_tests(list(the_classics, the_classics))
 
 
